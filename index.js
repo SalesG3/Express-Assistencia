@@ -9,12 +9,14 @@ app.post('/login', async (req, res) => {
     )
 
     if(query[0]){
-        res.send({ sucesso : query })
+        res.send({ sucesso : query[0] })
         return
     }
 
     if(!query[0]){
-        res.send({ erro : "Login e Senha não são compatíveis!" })
+        res.send({ erro : "Login e Senha Incompatíveis!" })
         return
     }
 })
+
+require('./routes/clientes.js');
