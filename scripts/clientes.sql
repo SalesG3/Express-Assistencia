@@ -55,3 +55,11 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
+
+# CONSULTAR REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE consultar_cliente ( idIn INT )
+BEGIN
+	SELECT * FROM clientes WHERE id_cliente = idIn;
+END $$
+DELIMITER ;
