@@ -56,10 +56,41 @@ BEGIN
 END $$
 DELIMITER ;
 
+# ALTERAR REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE alterar_cliente ( idIn INT, codigoIn CHAR(4), clienteIn VARCHAR(75), tipoIn VARCHAR(4), cadastroIn VARCHAR(18),
+contatoIn VARCHAR(13), emailIn VARCHAR(75), enderecoIn VARCHAR(75), historicoIn TEXT, ativoIn BOOLEAN, notificarIn BOOLEAN)
+BEGIN
+	IF NOT EXISTS ( SELECT id_cliente FROM clientes WHERE ( codigo = codigoIn OR cadastro = cadastroIn ) AND id_cliente <> idIn) THEN
+		UPDATE clientes SET codigo = codigoIn, cliente = clienteIn, tipo = tipoIn, cadastro = cadastroIn, contato = contatoIn, email = emailIn,
+        endereco = enderecoIn, historico = historicoIn, ativo = ativoIn, notificar = notificarIn WHERE id_cliente = idIn;
+
+	ELSE 
+		SELECT CASE
+			WHEN codigo = codigoIn AND id_cliente <> idIn THEN '#codigo'
+			WHEN cadastro = cadastroIn AND id_cliente <> idIn THEN '#cadastro'
+		END AS duplicado FROM clientes
+			WHERE CASE
+				WHEN codigo = codigoIn AND id_cliente <> idIn THEN '#codigo'
+				WHEN cadastro = cadastroIn AND id_cliente <> idIn THEN '#cadastro'
+			END IS NOT NULL;
+	END IF;
+END $$
+DELIMITER ;
+DROP PROCEDURE alterar_cliente;
+
 # CONSULTAR REGISTRO:
 DELIMITER $$
 CREATE PROCEDURE consultar_cliente ( idIn INT )
 BEGIN
 	SELECT * FROM clientes WHERE id_cliente = idIn;
+END $$
+DELIMITER ;
+
+# EXCLUIR REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE deletar_cliente ( idIn INT )
+BEGIN
+	DELETE FROM clientes WHERE id_cliente = idIn;
 END $$
 DELIMITER ;

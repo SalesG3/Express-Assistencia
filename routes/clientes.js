@@ -38,6 +38,26 @@ app.post('/novo/clientes', async(req, res) => {
         res.send({ duplicado : query[0] });
         return
     }
+});
+
+// Alterar Registro: Clientes
+app.put('/alterar/clientes/:id', async (req, res) => {
+    let { codigo, cliente, tipo, cadastro, contato, email, endereco, historico, ativo, notificar} = req.body;
+    let id = req.params.id;
+
+    let [query] = await conn.promise().execute('CALL alterar_cliente ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )',
+        [id, codigo, cliente, tipo, cadastro, contato, email, endereco, historico, ativo, notificar]
+    );
+
+    if(!query[0]){
+        res.send({ sucesso : query });
+        return
+    }
+
+    if(query[0]){
+        res.send({ duplicado : query[0] });
+        return
+    }
 })
 
 // Consultar Registro: Clientes
@@ -50,3 +70,14 @@ app.get('/consulta/clientes/:id', async (req, res) => {
 
     res.send(query[0]);
 });
+
+// Apagar Registro: Clientes
+app.delete('/delete/clientes/:id', async (req, res) => {
+    let id = req.params.id;
+
+    let [query] = await conn.promise().execute('CALL deletar_cliente ( ? )',
+        [id]
+    );
+
+    res.send(query);
+})
