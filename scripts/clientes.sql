@@ -19,9 +19,10 @@ CREATE TABLE clientes(
 DELIMITER $$
 CREATE PROCEDURE codigo_cliente ( )
 BEGIN
-	SELECT IFNULL(MAX(id_cliente), 0) +1 AS codigo FROM clientes;
+	SELECT IFNULL(MAX(codigo), 0) +1 AS codigo FROM clientes;
 END $$
 DELIMITER ;
+
 
 # DADOS GRID:
 DELIMITER $$
