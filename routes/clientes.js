@@ -58,7 +58,7 @@ app.put('/alterar/clientes/:id', async (req, res) => {
         res.send({ duplicado : query[0] });
         return
     }
-})
+});
 
 // Consultar Registro: Clientes
 app.get('/consulta/clientes/:id', async (req, res) => {
