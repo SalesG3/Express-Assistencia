@@ -51,4 +51,38 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
-	
+
+# ALTERAR REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE alterar_servico( idIn INT, codigoIn CHAR(4), servicoIn VARCHAR(75), duracaoIn VARCHAR(5), categoriaIn INT,
+	descontoIn FLOAT, valorIn FLOAT, descricaoIn TEXT, ativoIn BOOLEAN)
+BEGIN
+	IF NOT EXISTS( SELECT id_servico FROM servicos WHERE codigo = codigoIn AND id_servico <> idIn ) THEN
+		UPDATE servicos SET codigo = codigoIn, servico = servicoIn, duracao = duracaoIn, categoria = categoriaIn, desconto = descontoIn,
+        valor = valorIn, descricao = descricaoIn, valor = valorIn, descricao = descricaoIn, ativo = ativoIn WHERE id_servico = idIn;
+	ELSE 
+		SELECT CASE
+			WHEN codigo = codigoIn AND id_servico <> idIn THEN "#codigo"
+		END AS duplicado FROM servicos WHERE CASE
+			WHEN codigo = codigoIn AND id_servico <> idIn THEN "#codigo"
+		END IS NOT NULL;
+	END IF;
+END $$
+DELIMITER ;
+
+# CONSULTAR REGISTRO:
+# FAZER O LEFT JOIN DEPOIS DA CATEGORIA
+DELIMITER $$
+CREATE PROCEDURE consultar_servico ( idIn INT )
+BEGIN
+	SELECT * FROM servicos WHERE id_servico = idIn;
+END $$
+DELIMITER ;
+
+# APAGAR REGISTRO
+DELIMITER $$
+CREATE PROCEDURE deletar_servico ( idIn INT )
+BEGIN
+	DELETE FROM servicos WHERE id_servico = idIn;
+END $$
+DELIMITER ;
