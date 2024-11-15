@@ -86,3 +86,5 @@ BEGIN
 	DELETE FROM servicos WHERE id_servico = idIn;
 END $$
 DELIMITER ;
+
+SELECT * FROM servicos;

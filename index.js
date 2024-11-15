@@ -21,3 +21,4 @@ app.post('/login', async (req, res) => {
 
 require('./routes/clientes.js');
 require('./routes/servicos.js');
+require('./routes/categorias.js');
