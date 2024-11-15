@@ -12,6 +12,9 @@ CREATE TABLE servicos (
     ativo BOOLEAN NOT NULL
 );
 
+ALTER TABLE servicos RENAME COLUMN categoria TO id_categoria;
+ALTER TABLE servicos ADD CONSTRAINT id_categoria FOREIGN KEY (id_categoria)
+REFERENCES categorias(id_categoria);
 
 # DADOS PARA GRID:
 DELIMITER $$
@@ -39,7 +42,7 @@ CREATE PROCEDURE novo_servico ( codigoIn CHAR(4), servicoIn VARCHAR(75), duracao
 	descontoIn FLOAT, valorIn FLOAT, descricaoIn TEXT, ativoIn BOOLEAN)
 BEGIN
 	IF NOT EXISTS ( SELECT id_servico FROM servicos WHERE codigo = codigoIn ) THEN
-		INSERT INTO servicos ( codigo, servico, duracao, categoria, desconto, valor, descricao, ativo) VALUES
+		INSERT INTO servicos ( codigo, servico, duracao, id_categoria, desconto, valor, descricao, ativo) VALUES
 			( codigoIn, servicoIn, duracaoIn, categoriaIn, descontoIn, valorIn, descricaoIn, ativoIn);
 	ELSE
 		SELECT CASE
@@ -51,6 +54,7 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
+DROP PROCEDURE novo_servico;
 
 # ALTERAR REGISTRO:
 DELIMITER $$
@@ -58,8 +62,8 @@ CREATE PROCEDURE alterar_servico( idIn INT, codigoIn CHAR(4), servicoIn VARCHAR(
 	descontoIn FLOAT, valorIn FLOAT, descricaoIn TEXT, ativoIn BOOLEAN)
 BEGIN
 	IF NOT EXISTS( SELECT id_servico FROM servicos WHERE codigo = codigoIn AND id_servico <> idIn ) THEN
-		UPDATE servicos SET codigo = codigoIn, servico = servicoIn, duracao = duracaoIn, categoria = categoriaIn, desconto = descontoIn,
-        valor = valorIn, descricao = descricaoIn, valor = valorIn, descricao = descricaoIn, ativo = ativoIn WHERE id_servico = idIn;
+		UPDATE servicos SET codigo = codigoIn, servico = servicoIn, duracao = duracaoIn, id_categoria = categoriaIn, desconto = descontoIn,
+        valor = valorIn, descricao = descricaoIn, ativo = ativoIn WHERE id_servico = idIn;
 	ELSE 
 		SELECT CASE
 			WHEN codigo = codigoIn AND id_servico <> idIn THEN "#codigo"
@@ -75,9 +79,11 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE consultar_servico ( idIn INT )
 BEGIN
-	SELECT * FROM servicos WHERE id_servico = idIn;
+	SELECT servicos.*, CONCAT(categorias.codigo, ' - ', categorias.categoria) AS categoria
+    FROM servicos LEFT JOIN categorias ON servicos.id_categoria = categorias.id_categoria WHERE id_servico = idIn;
 END $$
 DELIMITER ;
+DROP PROCEDURE consultar_servico;
 
 # APAGAR REGISTRO
 DELIMITER $$
@@ -88,3 +94,4 @@ END $$
 DELIMITER ;
 
 SELECT * FROM servicos;
+

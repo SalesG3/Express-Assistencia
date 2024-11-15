@@ -14,8 +14,7 @@ CREATE PROCEDURE grid_categorias ( pesquisaIn VARCHAR(100))
 BEGIN
 	SELECT id_categoria, codigo, categoria, ativo FROM categorias WHERE
     codigo REGEXP pesquisaIn OR
-    categoria REGEXP pesquisaIn OR
-    ativo REGEXP pesquisaIn;
+    categoria REGEXP pesquisaIn;
 END $$
 DELIMITER ;
 
@@ -31,7 +30,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE novo_categoria ( codigoIn CHAR(4), categoriaIn VARCHAR(75), descricaoIn TEXT, ativoIn BOOLEAN)
 BEGIN
-	IF NOT EXISTS ( SELECT id_servico FROM servicos WHERE codigo = codigoIn ) THEN
+	IF NOT EXISTS ( SELECT id_categoria FROM categorias WHERE codigo = codigoIn ) THEN
 		INSERT INTO categorias ( codigo, categoria, descricao, ativo) VALUES
 			( codigoIn, categoriaIn, descricaoIn, ativoIn);
 	ELSE
@@ -66,7 +65,7 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE consultar_categoria ( idIn INT )
 BEGIN
-	SELECT * FROM servicos WHERE id_servico = idIn;
+	SELECT * FROM categorias WHERE id_categoria = idIn;
 END $$
 DELIMITER ;
 
@@ -75,9 +74,15 @@ DELIMITER $$
 CREATE PROCEDURE deletar_categoria ( idIn INT )
 BEGIN
 	IF NOT EXISTS ( SELECT id_categoria FROM servicos WHERE id_categoria = idIn ) THEN
-		DELETE FROM categorias WHERE id = idIn;
+		DELETE FROM categorias WHERE id_categoria = idIn;
 	END IF;
 END $$
 DELIMITER ;
 
-SELECT * FROM categorias;
+# LOOKUP CATEGORIAS:
+DELIMITER $$
+CREATE PROCEDURE lookup_categorias ( )
+BEGIN
+	SELECT id_categoria, codigo, categoria FROM categorias WHERE ativo = 1;
+END $$
+DELIMITER ;
