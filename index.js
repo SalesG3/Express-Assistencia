@@ -23,3 +23,4 @@ require('./routes/clientes.js');
 require('./routes/servicos.js');
 require('./routes/categorias.js');
 require('./routes/lookups.js');
+require('./routes/produtos.js');

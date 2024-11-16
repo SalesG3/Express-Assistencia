@@ -73,7 +73,11 @@ DELIMITER ;
 DELIMITER $$
 CREATE PROCEDURE deletar_categoria ( idIn INT )
 BEGIN
-	IF NOT EXISTS ( SELECT id_categoria FROM servicos WHERE id_categoria = idIn ) THEN
+	IF NOT EXISTS (
+        SELECT C.id_categoria FROM categorias AS C WHERE
+			EXISTS ( SELECT P.id_categoria FROM produtos AS P WHERE P.id_categoria = idIn ) 
+            OR EXISTS ( SELECT S.id_categoria FROM servicos AS S WHERE S.id_categoria = idIn )
+        ) THEN
 		DELETE FROM categorias WHERE id_categoria = idIn;
 	END IF;
 END $$
