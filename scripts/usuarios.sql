@@ -16,7 +16,7 @@ DELIMITER $$
 CREATE PROCEDURE login_usuario ( usuarioIn VARCHAR(25), senhaIn VARCHAR(100))
 BEGIN
 	IF EXISTS (SELECT id_usuario FROM usuarios WHERE usuario = usuarioIn AND senha = senhaIn) THEN
-		SELECT nome FROM usuarios WHERE usuario = usuarioIn AND senha = senhaIn;
+		SELECT id_usuario, nome FROM usuarios WHERE usuario = usuarioIn AND senha = senhaIn;
 	END IF;
 END $$
 DELIMITER ;

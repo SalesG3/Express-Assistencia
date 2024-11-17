@@ -68,7 +68,7 @@ app.put('/alterar/produtos/:id', async(req, res) => {
     };
 });
 
-// Consultar Registro: Serviços
+// Consultar Registro: Produtos
 app.get('/consulta/produtos/:id', async(req, res) => {
     let id = req.params.id;
 
@@ -79,7 +79,7 @@ app.get('/consulta/produtos/:id', async(req, res) => {
     res.send(query[0])
 });
 
-// Apagar Registro: Serviços
+// Apagar Registro: Produtos
 app.delete('/delete/produtos/:id', async(req, res) => {
     let id = req.params.id;
 

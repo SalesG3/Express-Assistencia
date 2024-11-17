@@ -82,11 +82,3 @@ BEGIN
 	END IF;
 END $$
 DELIMITER ;
-
-# LOOKUP CATEGORIAS:
-DELIMITER $$
-CREATE PROCEDURE lookup_categorias ( )
-BEGIN
-	SELECT id_categoria, codigo, categoria FROM categorias WHERE ativo = 1;
-END $$
-DELIMITER ;
