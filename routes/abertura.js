@@ -11,12 +11,6 @@ app.post('/grid/abertura', async(req, res) => {
         [pesquisa]
     );
 
-    let format = { year: 'numeric', month: 'numeric', day: 'numeric' };
-
-    console.log(query.toLocaleDateString())
-
-    console.log(query)
-
     res.send(query[0])
 });
 
@@ -82,7 +76,7 @@ app.get('/consulta/abertura/:id', async(req, res) => {
 app.delete('/delete/abertura/:id', async(req, res) => {
     let id = req.params.id;
 
-    let [query] = await conn.promise().execute('CALL deleter_abertura ( ? )',
+    let [query] = await conn.promise().execute('CALL deletar_abertura ( ? )',
         [id]
     )
 
