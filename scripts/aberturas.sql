@@ -23,8 +23,8 @@ CREATE PROCEDURE grid_abertura ( `pesquisaIn` VARCHAR(100))
 			AB.`id_abertura`	,
             AB.`codigo`			,
             CL.`cliente`		,
-            AB.`dt_abertura`		,
-            AB.`status`			
+            AB.`status`			,
+            DATE_FORMAT(AB.`dt_abertura`, '%d/%m/%Y') AS dt_abertura
 		FROM `aberturas` AS AB
         LEFT JOIN `clientes` AS CL ON AB.`id_cliente` = CL.`id_cliente`
         WHERE
@@ -74,9 +74,18 @@ CREATE PROCEDURE novo_abertura (
                     `equipamentoIn`	,
                     `descricaoIn`
                     );
+			ELSE
+				SELECT CASE
+					WHEN `codigo` = `codigoIn` THEN '#codigo'
+				END AS duplicado FROM `aberturas`
+				WHERE CASE
+					WHEN `codigo`= `codigoIn` THEN '#codigo'
+				END IS NOT NULL;
 			END IF;
 		END $$
 DELIMITER ;
+
+DROP PROCEDURE novo_abertura;
             
 # ALTERAR REGISTRO: ABERTURA
 DELIMITER $$
@@ -99,7 +108,9 @@ CREATE PROCEDURE alterar_abertura (
                 `id_usuario` = `usuarioIn`		,
                 `id_cliente` = `clienteIn`		,
                 `equipamento` = `equipamentoIn`	,
-                `descricao` = `descricaoIn`;
+                `descricao` = `descricaoIn`
+			WHERE
+				`id_abertura` = `idIn`;
 		ELSE
 			SELECT CASE
 				WHEN `codigo` = `codigoIn` AND `id_abertura` <> `idIn` THEN '#codigo'
@@ -116,17 +127,19 @@ DELIMITER $$
 CREATE PROCEDURE consultar_abertura ( `idIn` INT )
 	BEGIN
 		SELECT
-			AB.*,
+			AB.*				,
+            CL.`cadastro`		,
+            CL.`contato`		,
+            US.`nome` AS usuario,
             CONCAT(CL.`codigo`, ' - ', CL.`cliente`) AS cliente,
-            CL.`cadastro`,
-            CL.`contato`,
-            US.`usuario`
+            DATE_FORMAT(AB.`dt_abertura`, '%Y-%m-%d') AS dt_abertura
 		FROM `aberturas` AS AB
 			LEFT JOIN `clientes` AS CL ON AB.`id_cliente` = CL.`id_cliente`
             LEFT JOIN `usuarios` AS US ON AB.`id_usuario` = US.`id_usuario`
 		WHERE AB.`id_abertura` = `idIn`;
 	END $$
 DELIMITER ;
+DROP PROCEDURE consultar_abertura;
 
 # APAGAR REGISTRO: ABERTURA // INSERIR VALIDAÇÃO DE DEPENDENCIAS POSTERIORMENTE
 DELIMITER $$
