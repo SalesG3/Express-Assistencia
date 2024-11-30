@@ -33,13 +33,30 @@ CREATE PROCEDURE lookup_aberturas ( )
 			LEFT JOIN `clientes` AS CL ON CL.`id_cliente` = AB.`id_cliente`
         WHERE AB.`status` = "Abertura";
 	END $$
-DELIMITER ; 	
+DELIMITER ;
 
-# LOOKUP PRODUTOS/SERVICOS;
+# LOOKUP SERVIÇOS:
 DELIMITER $$
-CREATE PROCEDURE lookup_executado ( )
+CREATE PROCEDURE lookup_servicos ( )
 	BEGIN
-		SELECT `id_produto`, `codigo`, `produto` FROM `produtos`;
-        SELECT `id_servico`, `codigo`, `servico` FROM `servicos`;
+		SELECT
+			`id_servico`	,
+            `codigo`		,
+            `servico`		,
+			`valor`
+		FROM servicos WHERE `ativo` = 1;
+	END $$
+DELIMITER ;
+
+#LOOKUP PRODUTOS:
+DELIMITER $$
+CREATE PROCEDURE lookup_produtos ( )
+	BEGIN
+		SELECT
+			`id_produto`	,
+			`codigo`		,
+			`produto`		,
+			`valor`
+		FROM produtos WHERE `ativo` = 1;
 	END $$
 DELIMITER ;

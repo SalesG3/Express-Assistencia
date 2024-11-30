@@ -21,9 +21,16 @@ app.get('/lookup/ordem_servico', async(req, res) => {
     res.send(query[0])
 })
 
-app.get('/lookup/sub-executado', async(req, res) => {
+app.get('/lookup/servico', async(req, res) => {
 
-    let [query] = await conn.promise().execute(`CALL lookup_executado ( )`);
+    let [query] = await conn.promise().execute(`CALL lookup_servicos ( )`);
 
-    res.send(query);
-})
+    res.send(query[0]);
+});
+
+app.get('/lookup/produto', async(req, res) => {
+
+    let [query] = await conn.promise().execute(`CALL lookup_produtos ( )`);
+
+    res.send(query[0]);
+});
