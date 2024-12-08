@@ -28,10 +28,21 @@ app.post('/novo/andamento', async(req, res) => {
 
     id_andamento = query[0][0].id_andamento;
     for(let i = 0; i < registros.length; i++){
-        [query] = await conn.promise().query(`CALL novo_executado ( ?, ?, ?, ?, ?, ?)`,
-            [id_andamento, registros[i].tipo, registros[i].executado , registros[i].quantidade, registros[i].desconto, registros[i].liquido]
+        [query] = await conn.promise().query(`CALL novo_executado ( ?, ?, ?, ?, ?, ?, ?)`,
+            [id_andamento, registros[i].tipo, registros[i].executado , registros[i].quantidade, registros[i].desconto, registros[i].valor, registros[i].id]
         );
     };
 
     res.send({ sucesso : query });
 })
+
+// Deleter Registro e Sub-Registros: Andamento
+app.delete('/delete/andamento/:id', async(req, res) => {
+    let id = req.params.id;
+
+    let [query] = await conn.promise().execute('CALL deletar_andamento ( ? )',
+        [id]
+    );
+    
+    res.send(query);
+});
