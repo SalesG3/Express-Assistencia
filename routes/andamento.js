@@ -34,6 +34,17 @@ app.post('/novo/andamento', async(req, res) => {
     };
 
     res.send({ sucesso : query });
+});
+
+// Consultar Registro e Sub-Registros: Andamento
+app.get('/consulta/andamento/:id', async(req, res) => {
+    let id = req.params.id;
+
+    let [query] = await conn.promise().execute('CALL consultar_andamento( ? )',
+        [ id ]
+    );
+
+    res.send(query)
 })
 
 // Deleter Registro e Sub-Registros: Andamento

@@ -84,8 +84,6 @@ CREATE PROCEDURE novo_abertura (
 			END IF;
 		END $$
 DELIMITER ;
-
-DROP PROCEDURE novo_abertura;
             
 # ALTERAR REGISTRO: ABERTURA
 DELIMITER $$
