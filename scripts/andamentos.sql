@@ -153,7 +153,7 @@ CREATE PROCEDURE consultar_andamento ( idIn INT )
             EX.desconto AS desconto								,
             EX.quantidade AS quantidade							,
             EX.valor AS valor									,
-            EX.id_executado AS id_executado						,
+            EX.id_executado AS id								,
             "Consultando" AS status
 		FROM executados AS EX
 			LEFT JOIN servicos AS SE ON EX.id_servico = SE.id_servico
@@ -161,7 +161,48 @@ CREATE PROCEDURE consultar_andamento ( idIn INT )
 		WHERE EX.id_andamento = idIn;
 	END $$
 DELIMITER ;
-DROP PROCEDURE consultar_andamento;
+
+# ALTERAR SUB-REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE alterar_executado (
+	idIn_andamento INT	,
+    idIn_executado INT	,
+    tipoIn VARCHAR(10)	,
+    executadoIn INT		,
+    quantidadeIn INT	,
+    descontoIn FLOAT	,
+    valorIn FLOAT
+    )
+    BEGIN
+		IF tipoIn = "Servico" THEN
+			UPDATE executados SET
+				id_servico = executadoIn	,
+                id_produto = null			,
+                quantidade = quantidadeIn	,
+                desconto = descontoIn		,
+                valor = valorIn
+			WHERE id_andamento = idIn_andamento AND id_executado = idIn_executado;
+		END IF;
+		
+        IF tipoIn = "Produto" THEN
+			UPDATE executados SET
+				id_servico = null			,
+                id_produto = executadoIn	,
+                quantidade = quantidadeIn	,
+                desconto = descontoIn		,
+                valor = valorIn
+			WHERE id_andamento = idIn_andamento AND id_executado = idIn_executado;
+		END IF;
+	END $$
+DELIMITER ;
+
+# EXCLUIR SUB-REGISTRO:
+DELIMITER $$
+CREATE PROCEDURE deletar_executado ( idIn_andamento INT, idIn_executado INT)
+	BEGIN
+		DELETE FROM executados WHERE id_andamento = idIn_andamento AND id_executado = idIn_executado;
+	END $$
+DELIMITER ;
 			
 # EXCLUIR ANDAMENTO:
 DELIMITER $$
