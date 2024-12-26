@@ -34,3 +34,10 @@ app.get('/lookup/produto', async(req, res) => {
 
     res.send(query[0]);
 });
+
+app.get('/lookup/andamento', async(req, res) => {
+
+    let [query] = await conn.promise().execute('CALL lookup_andamento ( )');
+
+    res.send(query[0]);
+});

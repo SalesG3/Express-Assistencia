@@ -26,3 +26,4 @@ require('./routes/lookups.js');
 require('./routes/produtos.js');
 require('./routes/abertura.js');
 require('./routes/andamento.js');
+require('./routes/conclusao.js');

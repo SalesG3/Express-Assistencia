@@ -60,3 +60,24 @@ CREATE PROCEDURE lookup_produtos ( )
 		FROM produtos WHERE `ativo` = 1;
 	END $$
 DELIMITER ;
+
+# LOOKUP ANDAMENTO:
+DELIMITER $$
+CREATE PROCEDURE lookup_andamento ( )
+	BEGIN
+		SELECT 
+			AN.`id_andamento`	,
+            AB.`codigo`			,
+            CL.`cadastro`		,
+            CL.`contato`		,
+            AB.`equipamento`	,
+            CONCAT(CL.`codigo`, ' - ', CL.`cliente`) AS 'cliente',
+            
+            (SELECT SUM(EX.`valor` * EX.`quantidade`) FROM executados AS EX WHERE AN.`id_andamento` = EX.`id_andamento`) AS bruto,
+            (SELECT SUM((EX.`valor` * EX.`desconto` / 100) * EX.`quantidade`) FROM executados AS EX WHERE AN.`id_andamento` = EX.`id_andamento`) AS desconto
+        FROM andamentos AS AN
+			LEFT JOIN aberturas AS AB ON AN.`id_abertura` = AB.`id_abertura`
+            LEFT JOIN clientes AS CL ON AB.`id_cliente` = CL.`id_cliente`
+		WHERE AB.status = "Andamento";
+	END $$
+DELIMITER ;
