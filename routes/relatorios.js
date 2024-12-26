@@ -9,7 +9,7 @@ app.get('/relatorios/listagem/aberturas', async(req, res) => {
 
     const html = gerarHTML(query[0]);
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: 'new', args: ['--no-sandbox'], });
     const page = await browser.newPage();
 
     await page.setContent(html);
